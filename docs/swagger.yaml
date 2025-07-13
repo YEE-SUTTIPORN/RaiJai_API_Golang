@@ -1,0 +1,247 @@
+definitions:
+  models.JsonResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.TypeCreateRequest:
+    properties:
+      name:
+        maxLength: 50
+        type: string
+    required:
+    - name
+    type: object
+  models.UserCreateRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      name:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 50
+        minLength: 4
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  models.UserUpdateRequest:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 50
+        minLength: 4
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/types:
+    get:
+      description: ดึงข้อมูลประเภททั้งหมด
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.JsonResponse'
+            type: array
+      summary: Get all types
+      tags:
+      - types
+    post:
+      consumes:
+      - application/json
+      description: เพิ่มประเภทใหม่เข้าระบบ
+      parameters:
+      - description: Type JSON
+        in: body
+        name: type
+        required: true
+        schema:
+          $ref: '#/definitions/models.TypeCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Create a new type
+      tags:
+      - types
+  /api/types/{id}:
+    delete:
+      description: ลบประเภทที่มีอยู่
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Delete a type
+      tags:
+      - types
+    get:
+      description: ดึงข้อมูลประเภทตาม ID
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Get a type by ID
+      tags:
+      - types
+    put:
+      consumes:
+      - application/json
+      description: แก้ไขประเภทที่มีอยู่
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Type JSON
+        in: body
+        name: type
+        required: true
+        schema:
+          $ref: '#/definitions/models.TypeCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Update an existing type
+      tags:
+      - types
+  /api/users:
+    get:
+      description: ดึงข้อมูลผู้ใช้ทั้งหมด
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.JsonResponse'
+            type: array
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: เพิ่มผู้ใช้ใหม่เข้าระบบ
+      parameters:
+      - description: User JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Create a new user
+      tags:
+      - users
+  /api/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: ลบผู้ใช้ตาม ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: ดึงข้อมูลผู้ใช้ตาม ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Get a user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: แก้ไขข้อมูลผู้ใช้ที่มีอยู่
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Update an existing user
+      tags:
+      - users
+swagger: "2.0"

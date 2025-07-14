@@ -17,3 +17,19 @@ type Transaction struct {
     UpdatedAt  time.Time
     DeletedAt  gorm.DeletedAt `gorm:"index"`
 }
+
+type TransactionCreateRequest struct {
+    Amount     float64 `json:"amount" binding:"required"`
+    Note       string  `json:"note"`
+    Date       time.Time `json:"date" binding:"required"`
+    UserID     uint    `json:"user_id" binding:"required"`
+    CategoryID uint    `json:"category_id" binding:"required"`
+}
+
+type TransactionUpdateRequest struct {
+    Amount     float64 `json:"amount" binding:"required"`
+    Note       string  `json:"note"`
+    Date       time.Time `json:"date" binding:"required"`
+    UserID     uint    `json:"user_id" binding:"required"`
+    CategoryID uint    `json:"category_id" binding:"required"`
+}

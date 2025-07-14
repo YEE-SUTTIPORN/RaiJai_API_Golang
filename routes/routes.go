@@ -28,4 +28,22 @@ func SetupRoutes(r *gin.Engine) {
         typeGroup.DELETE("/:id", controllers.DeleteType)
         typeGroup.GET("/:id", controllers.GetTypeByID)
     }
+
+    category := r.Group("api/categories")
+    {
+        category.GET("/", controllers.GetCategories)
+        category.POST("/", controllers.CreateCategory)
+        category.PUT("/:id", controllers.UpdateCategory)
+        category.DELETE("/:id", controllers.DeleteCategory)
+        category.GET("/:id", controllers.GetCategory)
+    }
+
+    transaction := r.Group("api/transactions")
+    {
+        transaction.GET("/", controllers.GetTransactions)
+        transaction.POST("/", controllers.CreateTransaction)
+        transaction.PUT("/:id", controllers.UpdateTransaction)
+        transaction.DELETE("/:id", controllers.DeleteTransaction)
+        transaction.GET("/:id", controllers.GetTransaction)
+    }
 }

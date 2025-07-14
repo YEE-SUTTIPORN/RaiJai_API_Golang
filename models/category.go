@@ -7,3 +7,15 @@ type Category struct {
 	TypeID uint
 	UserID uint
 }
+
+type CategoryCreateRequest struct {
+	Name   string `json:"name" binding:"required"`
+	Icon   string `json:"icon"`
+	TypeID uint   `json:"type_id"`
+	UserID uint   `json:"user_id"`
+}
+
+type CategoryUpdateRequest struct {
+	Name string `json:"name" binding:"required"`
+	Icon string `json:"icon"`
+}

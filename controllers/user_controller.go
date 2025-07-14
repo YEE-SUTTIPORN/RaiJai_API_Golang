@@ -32,14 +32,22 @@ func GetUsers(c *gin.Context) {
 // @Success 201 {object} models.JsonResponse
 // @Router /api/users [post]
 func CreateUser(c *gin.Context) {
-    var user models.User
-    if err := c.ShouldBindJSON(&user); err != nil {
+    var req models.UserCreateRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
         c.JSON(http.StatusBadRequest, models.JsonResponse{
             Success: false,
             Message: "Invalid input data.",
             Data:    nil,
         })
         return
+    }
+
+    user := models.User{
+        Name:     req.Name,
+        Email:    req.Email,
+        Password: req.Password,
+        CreatedAt: time.Now(),
+        UpdatedAt: time.Now(),
     }
 
     // Validate unique username
@@ -52,9 +60,6 @@ func CreateUser(c *gin.Context) {
         })
         return
     }
-
-    user.CreatedAt = time.Now()
-    user.UpdatedAt = time.Now()
 
     database.DB.Create(&user)
     c.JSON(http.StatusCreated, models.JsonResponse{
@@ -86,8 +91,8 @@ func UpdateUser(c *gin.Context) {
         return
     }
 
-    var user models.User
-    if err := c.ShouldBindJSON(&user); err != nil {
+    var req models.UserUpdateRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
         c.JSON(http.StatusBadRequest, models.JsonResponse {
             Success: false,
             Message: "Invalid input data.",})
@@ -103,8 +108,12 @@ func UpdateUser(c *gin.Context) {
         return
     }
  
-    existingUser.Email = user.Email
-    existingUser.Password = user.Password
+    if req.Email != "" {
+        existingUser.Email = req.Email
+    }
+    if req.Password != "" {
+        existingUser.Password = req.Password
+    }
     existingUser.UpdatedAt = time.Now()
 
     if err := database.DB.Save(&existingUser).Error; err != nil {

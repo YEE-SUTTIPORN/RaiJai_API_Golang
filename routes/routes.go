@@ -1,10 +1,10 @@
 package routes
 
 import (
-        "RaiJaiAPI_Golang/controllers"
-        "RaiJaiAPI_Golang/middleware"
+	"RaiJaiAPI_Golang/controllers"
+	"RaiJaiAPI_Golang/middleware"
 
-        "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -14,8 +14,8 @@ func SetupRoutes(r *gin.Engine) {
 
     public := r.Group("/api")
     {
-        public.POST("/login", controllers.Login)
-        public.POST("/users", controllers.CreateUser)
+        public.POST("/auth/login", controllers.Login)
+        public.POST("/auth/register", controllers.Register)
     }
 
     auth := r.Group("/api")

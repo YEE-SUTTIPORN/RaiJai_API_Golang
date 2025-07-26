@@ -1,13 +1,13 @@
 package controllers
 
 import (
-        "RaiJaiAPI_Golang/database"
-        "RaiJaiAPI_Golang/models"
-        "net/http"
-        "time"
+	"RaiJaiAPI_Golang/database"
+	"RaiJaiAPI_Golang/models"
+	"net/http"
+	"time"
 
-        "github.com/gin-gonic/gin"
-        "golang.org/x/crypto/bcrypt"
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // GetUsers godoc
@@ -21,59 +21,6 @@ func GetUsers(c *gin.Context) {
     var users []models.User
     database.DB.Find(&users)
     c.JSON(http.StatusOK, models.JsonResponse{ Success: true, Message: "Users retrieved successfully.", Data: users })
-}
-
-// CreateUser godoc
-// @Summary Create a new user
-// @Description เพิ่มผู้ใช้ใหม่เข้าระบบ
-// @Tags users
-// @Accept json
-// @Produce json
-// @Param user body models.UserCreateRequest true "User JSON"
-// @Success 201 {object} models.JsonResponse
-// @Router /api/users [post]
-func CreateUser(c *gin.Context) {
-    var req models.UserCreateRequest
-    if err := c.ShouldBindJSON(&req); err != nil {
-        c.JSON(http.StatusBadRequest, models.JsonResponse{
-            Success: false,
-            Message: "Invalid input data.",
-            Data:    nil,
-        })
-        return
-    }
-
-    hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, models.JsonResponse{Success: false, Message: "Failed to process password."})
-        return
-    }
-
-    user := models.User{
-        Name:      req.Name,
-        Email:     req.Email,
-        Password:  string(hashed),
-        CreatedAt: time.Now(),
-        UpdatedAt: time.Now(),
-    }
-
-    // Validate unique username
-    var existingUser models.User
-    if err := database.DB.Where("name = ?", user.Name).First(&existingUser).Error; err == nil {
-        c.JSON(http.StatusConflict, models.JsonResponse{
-            Success: false,
-            Message: "Username already exists.",
-            Data:    nil,
-        })
-        return
-    }
-
-    database.DB.Create(&user)
-    c.JSON(http.StatusCreated, models.JsonResponse{
-        Success: true,
-        Message: "User created successfully.",
-        Data:    user,
-    })
 }
 
 // UpdateUser godoc

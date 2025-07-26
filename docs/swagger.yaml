@@ -29,6 +29,16 @@ definitions:
       success:
         type: boolean
     type: object
+  models.LoginRequest:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - name
+    - password
+    type: object
   models.TransactionCreateRequest:
     properties:
       amount:
@@ -103,6 +113,50 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: User login with username and password
+      parameters:
+      - description: Login JSON
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: User login
+      tags:
+      - auth
+  /api/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: เพิ่มผู้ใช้ใหม่เข้าระบบ
+      parameters:
+      - description: User JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Add a new user
+      tags:
+      - auth
   /api/categories:
     get:
       description: ดึงข้อมูลหมวดหมู่ทั้งหมด
@@ -401,27 +455,6 @@ paths:
               $ref: '#/definitions/models.JsonResponse'
             type: array
       summary: Get all users
-      tags:
-      - users
-    post:
-      consumes:
-      - application/json
-      description: เพิ่มผู้ใช้ใหม่เข้าระบบ
-      parameters:
-      - description: User JSON
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserCreateRequest'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/models.JsonResponse'
-      summary: Create a new user
       tags:
       - users
   /api/users/{id}:

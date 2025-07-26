@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"RaiJaiAPI_Golang/controllers"
+        "RaiJaiAPI_Golang/controllers"
+        "RaiJaiAPI_Golang/middleware"
 
-	"github.com/gin-gonic/gin"
+        "github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -11,16 +12,24 @@ func SetupRoutes(r *gin.Engine) {
         c.JSON(200, gin.H{"message": "pong"})
     })
 
-    user := r.Group("api/users")
+    public := r.Group("/api")
+    {
+        public.POST("/login", controllers.Login)
+        public.POST("/users", controllers.CreateUser)
+    }
+
+    auth := r.Group("/api")
+    auth.Use(middleware.AuthMiddleware())
+
+    user := auth.Group("/users")
     {
         user.GET("/", controllers.GetUsers)
-        user.POST("/", controllers.CreateUser)
         user.PUT("/:id", controllers.UpdateUser)
         user.DELETE("/:id", controllers.DeleteUser)
         user.GET("/:id", controllers.GetUserByID)
     }
 
-    typeGroup := r.Group("api/types")
+    typeGroup := auth.Group("/types")
     {
         typeGroup.GET("/", controllers.GetTypes)
         typeGroup.POST("/", controllers.CreateType)
@@ -29,7 +38,7 @@ func SetupRoutes(r *gin.Engine) {
         typeGroup.GET("/:id", controllers.GetTypeByID)
     }
 
-    category := r.Group("api/categories")
+    category := auth.Group("/categories")
     {
         category.GET("/", controllers.GetCategories)
         category.POST("/", controllers.CreateCategory)
@@ -38,7 +47,7 @@ func SetupRoutes(r *gin.Engine) {
         category.GET("/:id", controllers.GetCategory)
     }
 
-    transaction := r.Group("api/transactions")
+    transaction := auth.Group("/transactions")
     {
         transaction.GET("/", controllers.GetTransactions)
         transaction.POST("/", controllers.CreateTransaction)

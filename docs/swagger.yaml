@@ -43,6 +43,8 @@ definitions:
     properties:
       amount:
         type: number
+      book_id:
+        type: integer
       category_id:
         type: integer
       date:
@@ -52,15 +54,18 @@ definitions:
       user_id:
         type: integer
     required:
-    - amount
-    - category_id
-    - date
-    - user_id
+      - amount
+      - book_id
+      - category_id
+      - date
+      - user_id
     type: object
   models.TransactionUpdateRequest:
     properties:
       amount:
         type: number
+      book_id:
+        type: integer
       category_id:
         type: integer
       date:
@@ -70,10 +75,11 @@ definitions:
       user_id:
         type: integer
     required:
-    - amount
-    - category_id
-    - date
-    - user_id
+      - amount
+      - book_id
+      - category_id
+      - date
+      - user_id
     type: object
   models.TypeCreateRequest:
     properties:

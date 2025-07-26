@@ -20,3 +20,11 @@ Authorization: Bearer <token>
 ```
 
 User registration remains open at `POST /api/users`.
+
+### Books
+
+Authenticated users can manage books:
+
+- `POST /api/books` – create a new book by providing a `title`.
+- `POST /api/books/{id}/users/{userId}` – add a user to a book.
+- `GET /api/books/{id}` – retrieve a book with its members.

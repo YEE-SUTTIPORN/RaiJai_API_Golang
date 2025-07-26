@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"RaiJaiAPI_Golang/database"
-	"RaiJaiAPI_Golang/models"
-	"net/http"
-	"time"
+        "RaiJaiAPI_Golang/database"
+        "RaiJaiAPI_Golang/models"
+        "net/http"
+        "time"
 
-	"github.com/gin-gonic/gin"
+        "github.com/gin-gonic/gin"
+        "golang.org/x/crypto/bcrypt"
 )
 
 // GetUsers godoc
@@ -42,10 +43,16 @@ func CreateUser(c *gin.Context) {
         return
     }
 
+    hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, models.JsonResponse{Success: false, Message: "Failed to process password."})
+        return
+    }
+
     user := models.User{
-        Name:     req.Name,
-        Email:    req.Email,
-        Password: req.Password,
+        Name:      req.Name,
+        Email:     req.Email,
+        Password:  string(hashed),
         CreatedAt: time.Now(),
         UpdatedAt: time.Now(),
     }
@@ -112,7 +119,12 @@ func UpdateUser(c *gin.Context) {
         existingUser.Email = req.Email
     }
     if req.Password != "" {
-        existingUser.Password = req.Password
+        hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, models.JsonResponse{Success: false, Message: "Failed to process password."})
+            return
+        }
+        existingUser.Password = string(hashed)
     }
     existingUser.UpdatedAt = time.Now()
 

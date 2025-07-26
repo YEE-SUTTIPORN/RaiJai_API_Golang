@@ -1,4 +1,11 @@
 definitions:
+  models.BookCreateRequest:
+    properties:
+      title:
+        type: string
+    required:
+    - title
+    type: object
   models.CategoryCreateRequest:
     properties:
       icon:
@@ -54,11 +61,11 @@ definitions:
       user_id:
         type: integer
     required:
-      - amount
-      - book_id
-      - category_id
-      - date
-      - user_id
+    - amount
+    - book_id
+    - category_id
+    - date
+    - user_id
     type: object
   models.TransactionUpdateRequest:
     properties:
@@ -75,11 +82,11 @@ definitions:
       user_id:
         type: integer
     required:
-      - amount
-      - book_id
-      - category_id
-      - date
-      - user_id
+    - amount
+    - book_id
+    - category_id
+    - date
+    - user_id
     type: object
   models.TypeCreateRequest:
     properties:
@@ -163,6 +170,127 @@ paths:
       summary: Add a new user
       tags:
       - auth
+  /api/books:
+    get:
+      description: ดึงข้อมูลหนังสือทั้งหมด
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.JsonResponse'
+            type: array
+      summary: Get all books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: สร้างหนังสือใหม่
+      parameters:
+      - description: Book JSON
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Create a new book
+      tags:
+      - books
+  /api/books/{id}:
+    delete:
+      description: ลบหนังสือตาม ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Delete a book
+      tags:
+      - books
+    get:
+      description: ดึงข้อมูลหนังสือตาม ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Get a book by ID
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      description: แก้ไขชื่อหนังสือ
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book JSON
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Update book title
+      tags:
+      - books
+  /api/books/{id}/users/{userId}:
+    post:
+      description: เพิ่มผู้ใช้เข้าเล่มหนังสือ
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.JsonResponse'
+      summary: Add a user to a book
+      tags:
+      - books
   /api/categories:
     get:
       description: ดึงข้อมูลหมวดหมู่ทั้งหมด

@@ -28,6 +28,16 @@ func CreateCategory(c *gin.Context) {
 		return
 	}
 
+	isExists := database.DB.Where("name = ?", request.Name).First(&models.Category{}).RowsAffected > 0
+	if isExists {
+		c.JSON(http.StatusConflict, models.JsonResponse{
+			Success: false,
+			Message: "Category with this name already exists.",
+			Data:    nil,
+		})
+		return
+	}
+
 	category := models.Category{
 		Name:   request.Name,
 		Icon:   request.Icon,
@@ -104,6 +114,16 @@ func UpdateCategory(c *gin.Context) {
 		return
 	}
 
+	isExists := database.DB.Where("name = ? AND id != ?", request.Name, id).First(&models.Category{}).RowsAffected > 0
+	if isExists {
+		c.JSON(http.StatusConflict, models.JsonResponse{
+			Success: false,
+			Message: "Category with this name already exists.",
+			Data:    nil,
+		})
+		return
+	}
+
 	category.Name = request.Name
 	category.Icon = request.Icon
 
@@ -149,7 +169,7 @@ func DeleteCategory(c *gin.Context) {
 		return
 	}
 	
-	c.JSON(http.StatusNoContent, models.JsonResponse{
+	c.JSON(http.StatusOK, models.JsonResponse{
 		Success: true,
 		Message: "Category deleted successfully.",
 		Data:    nil,

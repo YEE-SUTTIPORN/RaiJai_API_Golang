@@ -58,8 +58,11 @@ func SetupRoutes(r *gin.Engine) {
 
 	book := auth.Group("/books")
 	{
+		book.GET("/", controllers.GetBooks)
 		book.POST("/", controllers.CreateBook)
 		book.GET("/:id", controllers.GetBook)
+		book.PUT("/:id", controllers.UpdateBook)
+		book.DELETE("/:id", controllers.DeleteBook)
 		book.POST("/:id/users/:userId", controllers.AddUserToBook)
 	}
 }

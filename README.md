@@ -25,6 +25,19 @@ User registration remains open at `POST /api/users`.
 
 Authenticated users can manage books:
 
+- `GET /api/books` – list all books.
 - `POST /api/books` – create a new book by providing a `title`.
-- `POST /api/books/{id}/users/{userId}` – add a user to a book.
 - `GET /api/books/{id}` – retrieve a book with its members.
+- `PUT /api/books/{id}` – update the book title.
+- `DELETE /api/books/{id}` – delete a book.
+- `POST /api/books/{id}/users/{userId}` – add a user to a book.
+
+### Transactions
+
+Transactions must specify which book they belong to:
+
+- `POST /api/transactions` – create a transaction using `amount`, `note`, `date`, `user_id`, `book_id` and `category_id`.
+- `GET /api/transactions` – list all transactions.
+- `GET /api/transactions/{id}` – retrieve a transaction.
+- `PUT /api/transactions/{id}` – update a transaction.
+- `DELETE /api/transactions/{id}` – remove a transaction.

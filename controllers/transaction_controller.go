@@ -33,6 +33,7 @@ func CreateTransaction(c *gin.Context) {
 		Note:       request.Note,
 		Date:       request.Date,
 		UserID:     request.UserID,
+		BookID:     request.BookID,
 		CategoryID: request.CategoryID,
 	}
 
@@ -61,7 +62,7 @@ func CreateTransaction(c *gin.Context) {
 // @Router /api/transactions [get]
 func GetTransactions(c *gin.Context) {
 	var transactions []models.Transaction
-	if err := database.DB.Find(&transactions).Error; err != nil {
+	if err := database.DB.Preload("Book").Find(&transactions).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, models.JsonResponse{
 			Success: false,
 			Message: "Failed to retrieve transactions.",
@@ -112,6 +113,7 @@ func UpdateTransaction(c *gin.Context) {
 	transaction.Note = request.Note
 	transaction.Date = request.Date
 	transaction.UserID = request.UserID
+	transaction.BookID = request.BookID
 	transaction.CategoryID = request.CategoryID
 	if err := database.DB.Save(&transaction).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, models.JsonResponse{
@@ -172,7 +174,7 @@ func DeleteTransaction(c *gin.Context) {
 func GetTransaction(c *gin.Context) {
 	id := c.Param("id")
 	var transaction models.Transaction
-	if err := database.DB.First(&transaction, id).Error; err != nil {
+	if err := database.DB.Preload("Book").First(&transaction, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, models.JsonResponse{
 			Success: false,
 			Message: "Transaction not found.",

@@ -2,7 +2,11 @@ module RaiJaiAPI_Golang
 
 go 1.24.4
 
-require github.com/stretchr/testify v1.10.0
+require (
+        github.com/golang-jwt/jwt/v5 v5.0.0
+        github.com/stretchr/testify v1.10.0
+        gorm.io/driver/sqlite v1.5.7
+)
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect

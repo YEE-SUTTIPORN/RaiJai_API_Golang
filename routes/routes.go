@@ -8,10 +8,6 @@ import (
 )
 
 func SetupRoutes(r *gin.Engine) {
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "pong"})
-	})
-
 	public := r.Group("/api")
 	{
 		public.POST("/auth/login", controllers.Login)
@@ -23,7 +19,7 @@ func SetupRoutes(r *gin.Engine) {
 
 	user := auth.Group("/users")
 	{
-		user.GET("/", controllers.GetUsers)
+		user.GET("", controllers.GetUsers)
 		user.PUT("/:id", controllers.UpdateUser)
 		user.DELETE("/:id", controllers.DeleteUser)
 		user.GET("/:id", controllers.GetUserByID)
@@ -31,8 +27,8 @@ func SetupRoutes(r *gin.Engine) {
 
 	typeGroup := auth.Group("/types")
 	{
-		typeGroup.GET("/", controllers.GetTypes)
-		typeGroup.POST("/", controllers.CreateType)
+		typeGroup.GET("", controllers.GetTypes)
+		typeGroup.POST("", controllers.CreateType)
 		typeGroup.PUT("/:id", controllers.UpdateType)
 		typeGroup.DELETE("/:id", controllers.DeleteType)
 		typeGroup.GET("/:id", controllers.GetTypeByID)
@@ -40,8 +36,8 @@ func SetupRoutes(r *gin.Engine) {
 
 	category := auth.Group("/categories")
 	{
-		category.GET("/", controllers.GetCategories)
-		category.POST("/", controllers.CreateCategory)
+		category.GET("", controllers.GetCategories)
+		category.POST("", controllers.CreateCategory)
 		category.PUT("/:id", controllers.UpdateCategory)
 		category.DELETE("/:id", controllers.DeleteCategory)
 		category.GET("/:id", controllers.GetCategory)
@@ -49,8 +45,8 @@ func SetupRoutes(r *gin.Engine) {
 
 	transaction := auth.Group("/transactions")
 	{
-		transaction.GET("/", controllers.GetTransactions)
-		transaction.POST("/", controllers.CreateTransaction)
+		transaction.GET("", controllers.GetTransactions)
+		transaction.POST("", controllers.CreateTransaction)
 		transaction.PUT("/:id", controllers.UpdateTransaction)
 		transaction.DELETE("/:id", controllers.DeleteTransaction)
 		transaction.GET("/:id", controllers.GetTransaction)
@@ -58,8 +54,8 @@ func SetupRoutes(r *gin.Engine) {
 
 	book := auth.Group("/books")
 	{
-		book.GET("/", controllers.GetBooks)
-		book.POST("/", controllers.CreateBook)
+		book.GET("", controllers.GetBooks)
+		book.POST("", controllers.CreateBook)
 		book.GET("/:id", controllers.GetBook)
 		book.PUT("/:id", controllers.UpdateBook)
 		book.DELETE("/:id", controllers.DeleteBook)

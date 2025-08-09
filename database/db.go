@@ -18,6 +18,10 @@ func ConnectDB() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	db.AutoMigrate(&models.User{}, &models.Type{}, &models.Category{}, &models.Transaction{}, &models.Book{})
+	migrateErr := db.AutoMigrate(&models.User{}, &models.Type{}, &models.Category{}, &models.Transaction{}, &models.Book{})
+	if migrateErr != nil {
+		log.Fatal("Failed to migrate database:", migrateErr)
+	}
+
 	DB = db
 }

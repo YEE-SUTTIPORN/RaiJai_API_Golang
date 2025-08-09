@@ -153,5 +153,5 @@ func DeleteBook(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, models.JsonResponse{Success: false, Message: "Failed to delete book."})
 		return
 	}
-	c.JSON(http.StatusNoContent, models.JsonResponse{Success: true, Message: "Book deleted successfully."})
+	c.JSON(http.StatusOK, models.JsonResponse{Success: true, Message: "Book deleted successfully."})
 }

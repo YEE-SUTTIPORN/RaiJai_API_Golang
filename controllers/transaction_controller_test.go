@@ -1,4 +1,4 @@
-package controllers
+package controllers_test
 
 import (
 	"bytes"
@@ -25,7 +25,7 @@ func TestCreateAndListTransactions(t *testing.T) {
 	}
 	ttype := models.Type{Name: "expense"}
 	database.DB.Create(&ttype)
-	category := models.Category{Name: "food", TypeID: ttype.ID, UserID: user.ID}
+	category := models.Category{Name: "food", UserID: user.ID}
 	database.DB.Create(&category)
 	book := models.Book{Title: "wallet"}
 	database.DB.Create(&book)
@@ -34,7 +34,7 @@ func TestCreateAndListTransactions(t *testing.T) {
 
 	payload := fmt.Sprintf(`{"amount":100,"note":"lunch","date":"%s","user_id":%d,"book_id":%d,"category_id":%d}`,
 		time.Now().Format(time.RFC3339), user.ID, book.ID, category.ID)
-	req := httptest.NewRequest("POST", "/api/transactions/", bytes.NewBufferString(payload))
+	req := httptest.NewRequest("POST", "/api/transactions", bytes.NewBufferString(payload))
 	req.Header.Set("Authorization", "Bearer "+token)
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
@@ -43,7 +43,7 @@ func TestCreateAndListTransactions(t *testing.T) {
 		t.Fatalf("expected 201 got %d", w.Code)
 	}
 
-	req = httptest.NewRequest("GET", "/api/transactions/", nil)
+	req = httptest.NewRequest("GET", "/api/transactions", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	w = httptest.NewRecorder()
 	r.ServeHTTP(w, req)

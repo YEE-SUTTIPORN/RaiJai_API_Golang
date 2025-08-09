@@ -1,4 +1,4 @@
-package controllers
+package controllers_test
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func TestGetUsers(t *testing.T) {
 	}
 	token, _ := utils.GenerateToken(u.ID)
 
-	req := httptest.NewRequest("GET", "/api/users/", nil)
+	req := httptest.NewRequest("GET", "/api/users", nil)
 	req.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)

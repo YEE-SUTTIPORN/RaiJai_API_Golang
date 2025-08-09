@@ -28,8 +28,21 @@ func CreateCategory(c *gin.Context) {
 		return
 	}
 
-	isExists := database.DB.Where("name = ?", request.Name).First(&models.Category{}).RowsAffected > 0
-	if isExists {
+	var count int64
+	isExists := database.DB.
+		Where(&models.Category { Name: request.Name, BookID: request.BookID }).
+		Count(&count)
+
+	if isExists.Error != nil {
+		c.JSON(http.StatusInternalServerError, models.JsonResponse{
+			Success: false,
+			Message: "Failed to check existing categories.",
+			Data:    nil,
+		})
+		return
+	}
+
+	if count > 0 {
 		c.JSON(http.StatusConflict, models.JsonResponse{
 			Success: false,
 			Message: "Category with this name already exists.",
@@ -41,8 +54,8 @@ func CreateCategory(c *gin.Context) {
 	category := models.Category{
 		Name:   request.Name,
 		Icon:   request.Icon,
-		TypeID: request.TypeID,
 		UserID: request.UserID,
+		BookID: request.BookID,
 	}
 
 	if err := database.DB.Create(&category).Error; err != nil {
@@ -114,8 +127,19 @@ func UpdateCategory(c *gin.Context) {
 		return
 	}
 
-	isExists := database.DB.Where("name = ? AND id != ?", request.Name, id).First(&models.Category{}).RowsAffected > 0
-	if isExists {
+	var count int64
+	isExists := database.DB.Where(&models.Category { Name: request.Name, BookID: category.BookID }).Count(&count)
+
+	if isExists.Error != nil {
+		c.JSON(http.StatusInternalServerError, models.JsonResponse{
+			Success: false,
+			Message: "Failed to check existing categories.",
+			Data:    nil,
+		})
+		return
+	}
+
+	if count > 0 {
 		c.JSON(http.StatusConflict, models.JsonResponse{
 			Success: false,
 			Message: "Category with this name already exists.",

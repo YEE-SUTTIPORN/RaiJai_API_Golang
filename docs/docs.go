@@ -842,14 +842,14 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
+                "book_id": {
+                    "type": "integer"
+                },
                 "icon": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
-                },
-                "type_id": {
-                    "type": "integer"
                 },
                 "user_id": {
                     "type": "integer"
